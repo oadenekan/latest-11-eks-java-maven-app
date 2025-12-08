@@ -62,11 +62,13 @@ pipeline {
                         '''
 
                         sh 'git config --list'
-
-                        git stash
-                        git fetch origin Jenkins-jobs
-                        git checkout -B Jenkins-jobs origin/Jenkins-jobs
-                        git stash pop || echo "No changes to apply"
+                        
+                        sh '''
+                            git stash
+                            git fetch origin Jenkins-jobs
+                            git checkout -B Jenkins-jobs origin/Jenkins-jobs
+                            git stash pop || echo "No changes to apply"
+                        '''
 
 
                         sh 'git add .'
