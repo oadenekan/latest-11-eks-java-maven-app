@@ -25,8 +25,6 @@ pipeline {
         stage("build image") {
             steps {
                 script {
-                    echo "Building Docker image..."
-                    sh 'sudo docker version'   // <-- NEW: check Docker access
                     gv.buildImage()
                 }
             }
