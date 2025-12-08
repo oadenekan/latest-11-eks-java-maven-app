@@ -26,7 +26,7 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker image..."
-                    sh 'docker version'   // <-- NEW: check Docker access
+                    sh 'sudo docker version'   // <-- NEW: check Docker access
                     gv.buildImage()
                 }
             }
