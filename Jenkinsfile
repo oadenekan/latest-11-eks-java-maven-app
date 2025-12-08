@@ -63,14 +63,9 @@ pipeline {
 
                         sh 'git config --list'
 
-                        # Stash any local changes
                         git stash
-
-                        # Checkout Jenkins-jobs branch from origin
                         git fetch origin Jenkins-jobs
                         git checkout -B Jenkins-jobs origin/Jenkins-jobs
-
-                        # Apply stashed changes
                         git stash pop || echo "No changes to apply"
 
 
