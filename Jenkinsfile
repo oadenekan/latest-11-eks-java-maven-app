@@ -1,31 +1,38 @@
-#!/usr/bin/env groovy
+def gv
 
 pipeline {
     agent any
     stages {
-        stage('build app') {
-            steps {
-               script {
-                   echo "building the application..."
-               }
-            }
-        }
-        stage('build image') {
+        stage("test") {
             steps {
                 script {
-                    echo "building the docker image..."
+                    echo "testing the application..."
+                    echo "Executing pipeline for $BRANCH_NAME"
+                    echo "Testing the integration"
                 }
             }
         }
-        stage('deploy') {
-            environment {
-                AWS_ACCESS_KEY_ID = credentials('jenkins_aws_access_key_id')
-                AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws_secret_access_key')
+        stage("build") {
+            when {
+                expression {
+                    BRANCH_NAME == 'master'
+                }
             }
             steps {
                 script {
-                   echo 'deploying docker image...'
-                   sh 'kubectl create deployment nginx-deployment --image=nginx'
+                    echo "building the application..."
+                }
+            }
+        }
+        stage("deploy") {
+            when {
+                expression {
+                    BRANCH_NAME == 'master'
+                }
+            }
+            steps {
+                script{
+                    echo "deploying the application..."
                 }
             }
         }
