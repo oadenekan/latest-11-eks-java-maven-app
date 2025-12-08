@@ -63,19 +63,20 @@ pipeline {
 
                         sh 'git config --list'
 
-                        // Fetch the latest remote branch
-                        sh 'git fetch origin Jenkins-jobs'
+                        # Stash any local changes
+                        git stash
 
-                        // Checkout local branch tracking remote
-                        sh 'git checkout -B Jenkins-jobs origin/Jenkins-jobs'
+                        # Checkout Jenkins-jobs branch from origin
+                        git fetch origin Jenkins-jobs
+                        git checkout -B Jenkins-jobs origin/Jenkins-jobs
 
-                        // Merge the current detached HEAD commit (version bump)
-                        sh 'git merge HEAD@{1} --no-edit || echo "Nothing to merge"'
+                        # Apply stashed changes
+                        git stash pop || echo "No changes to apply"
 
 
                         sh 'git add .'
                         sh 'git commit --author="jenkins <jenkins-bot@example.com>" -m "ci: version bump" || echo "Nothing to commit"'
-                        sh 'git push origin HEAD:Jenkins-jobs'
+                        sh 'git push origin Jenkins-jobs'
                     }
                 }
             }
