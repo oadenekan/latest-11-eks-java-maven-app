@@ -88,14 +88,14 @@ pipeline {
         stage("commit version update") {
             steps {
                 script {
+                    // Clean workspace of old temporary key files (optional but safe)
+                    sh 'rm -f $WORKSPACE@tmp/private_key_*.key'
+
                     sshagent(['GitHub-ssh-bot-latest-11-eks']) {
                         // Configure git user
                         sh 'git config --global user.email "jenkins-bot@example.com"'
                         sh 'git config --global user.name "jenkins"'
                         sh 'git remote set-url origin git@github.com:oadenekan/latest-11-eks-java-maven-app.git'
-
-                        // Clean workspace of old temporary key files (optional but safe)
-                        sh 'rm -f $WORKSPACE@tmp/private_key_*.key'
 
                         // Add, commit, and push changes
                         sh '''
