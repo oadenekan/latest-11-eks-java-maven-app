@@ -77,20 +77,6 @@ pipeline {
                 }
             }
         }
-        stage("commit version update") {
-            steps {
-                script {
-                    sshagent(['GitHub-ssh-bot-latest-11-eks']) {
-                        sh 'git config --global user.email "jenkins-bot@example.com"'
-                        sh 'git config --global user.name "jenkins"'
-                        sh 'git remote set-url origin git@github.com:oadenekan/latest-11-eks-java-maven-app.git'
-
-                        sh '''
-                            mkdir -p ~/.ssh
-                            ssh-keyscan github.com >> ~/.ssh/known_hosts
-                        '''
-
-                        sh 'git config --list'
 
                         /**** sh '''
                             git stash
@@ -99,9 +85,24 @@ pipeline {
                             git stash pop || echo "No changes to apply"
                         ''' ***/
 
-                        sh 'git add .'
-                        sh 'git commit --author="jenkins <jenkins-bot@example.com>" -m "ci: version bump [skip ci]" || echo "Nothing to commit"'
-                        sh 'git push origin HEAD:Jenkins-jobs'
+        stage("commit version update") {
+            steps {
+                script {
+                    sshagent(['GitHub-ssh-bot-latest-11-eks']) {
+                        // Configure git user
+                        sh 'git config --global user.email "jenkins-bot@example.com"'
+                        sh 'git config --global user.name "jenkins"'
+                        sh 'git remote set-url origin git@github.com:oadenekan/latest-11-eks-java-maven-app.git'
+
+                        // Clean workspace of old temporary key files (optional but safe)
+                        sh 'rm -f $WORKSPACE@tmp/private_key_*.key'
+
+                        // Add, commit, and push changes
+                        sh '''
+                            git add .
+                            git commit --author="jenkins <jenkins-bot@example.com>" -m "ci: version bump [skip ci]" || echo "Nothing to commit"
+                            git push origin HEAD:Jenkins-jobs
+                        '''
                     }
                 }
             }
