@@ -70,13 +70,15 @@ pipeline {
 
                         sh 'git config --list'
 
-                        sh 'git add .'
-                        sh 'git commit --author="jenkins <jenkins-bot@example.com>" -m "ci: version bump" || echo "Nothing to commit"'
                         sh '''
+                            git stash
                             git fetch origin Jenkins-jobs
-                            git rebase origin/Jenkins-jobs || git rebase --abort
+                            git checkout -B Jenkins-jobs origin/Jenkins-jobs
+                            git stash pop || echo "No changes to apply"
                         '''
 
+                        sh 'git add .'
+                        sh 'git commit --author="jenkins <jenkins-bot@example.com>" -m "ci: version bump" || echo "Nothing to commit"'
                         sh 'git push origin HEAD:Jenkins-jobs'
                     }
                 }
