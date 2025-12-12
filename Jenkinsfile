@@ -12,7 +12,7 @@ pipeline {
         skipDefaultCheckout()
     }
     stages {
-        /***stage('Checkout') {
+        stage('Checkout') {
             steps {
                 checkout scm
 
@@ -27,7 +27,7 @@ pipeline {
                     }
                 }
             }
-        }***/
+        }
         stage ("increment version"){
             steps {
                 script {
