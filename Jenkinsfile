@@ -83,7 +83,7 @@ pipeline {
                     sshagent(['GitHub-ssh-bot']) {
                         sh 'git config --global user.email "jenkins-bot@example.com"'
                         sh 'git config --global user.name "jenkins"'
-                        sh 'git remote set-url origin git@github.com:oadenekan/java-maven-app.git'
+                        sh 'git remote set-url origin git@github.com:oadenekan/latest-11-eks-java-maven-app.git'
 
                         sh '''
                             mkdir -p ~/.ssh
@@ -92,12 +92,12 @@ pipeline {
 
                         sh 'git config --list'
 
-                        sh '''
+                        /**** sh '''
                             git stash
                             git fetch origin Jenkins-jobs
                             git checkout -B Jenkins-jobs origin/Jenkins-jobs
                             git stash pop || echo "No changes to apply"
-                        '''
+                        ''' ***/
 
                         sh 'git add .'
                         sh 'git commit --author="jenkins <jenkins-bot@example.com>" -m "ci: version bump [skip ci]" || echo "Nothing to commit"'
