@@ -72,6 +72,11 @@ pipeline {
 
                         sh 'git add .'
                         sh 'git commit --author="jenkins <jenkins-bot@example.com>" -m "ci: version bump" || echo "Nothing to commit"'
+                        sh '''
+                            git fetch origin Jenkins-jobs
+                            git rebase origin/Jenkins-jobs || git rebase --abort
+                        '''
+
                         sh 'git push origin HEAD:Jenkins-jobs'
                     }
                 }
