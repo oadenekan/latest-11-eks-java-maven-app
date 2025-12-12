@@ -5,7 +5,29 @@ pipeline {
     tools {
         maven "Maven"
     }
+    /****************************************************
+     *  SKIP BUILDS TRIGGERED BY THE JENKINS BOT COMMIT
+     ****************************************************/
+    options {
+        skipDefaultCheckout()
+    }
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+
+                script {
+                    if (env.GIT_AUTHOR_NAME == "jenkins" ||
+                        env.GIT_COMMITTER_NAME == "jenkins") {
+
+                        echo "Skipping build — triggered by Jenkins bot commit"
+                        currentBuild.result = 'SUCCESS'
+                        // Hard exit: no more stages will run
+                        error("STOP_PIPELINE")
+                    }
+                }
+            }
+        }
         stage ("increment version"){
             steps {
                 script {
