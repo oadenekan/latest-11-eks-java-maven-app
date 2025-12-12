@@ -78,7 +78,7 @@ pipeline {
                         '''
 
                         sh 'git add .'
-                        sh 'git commit --author="jenkins <jenkins-bot@example.com>" -m "ci: version bump" || echo "Nothing to commit"'
+                        sh 'git commit --author="jenkins <jenkins-bot@example.com>" -m "ci: version bump [skip ci]" || echo "Nothing to commit"'
                         sh 'git push origin HEAD:Jenkins-jobs'
                     }
                 }
