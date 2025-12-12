@@ -12,7 +12,7 @@ pipeline {
         skipDefaultCheckout()
     }
     stages {
-        stage('Checkout') {
+        /***stage('Checkout') {
             steps {
                 checkout scm
 
@@ -27,7 +27,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }***/
         stage ("increment version"){
             steps {
                 script {
@@ -80,7 +80,7 @@ pipeline {
         stage("commit version update") {
             steps {
                 script {
-                    sshagent(['GitHub-ssh-bot']) {
+                    sshagent(['GitHub-ssh-bot-latest-11-eks']) {
                         sh 'git config --global user.email "jenkins-bot@example.com"'
                         sh 'git config --global user.name "jenkins"'
                         sh 'git remote set-url origin git@github.com:oadenekan/latest-11-eks-java-maven-app.git'
