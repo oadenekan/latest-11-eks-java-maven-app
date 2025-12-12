@@ -78,19 +78,9 @@ pipeline {
             }
         }
 
-                        /**** sh '''
-                            git stash
-                            git fetch origin Jenkins-jobs
-                            git checkout -B Jenkins-jobs origin/Jenkins-jobs
-                            git stash pop || echo "No changes to apply"
-                        ''' ***/
-
         stage("commit version update") {
             steps {
                 script {
-                    // Clean workspace of old temporary key files (optional but safe)
-                    sh 'rm -f $WORKSPACE@tmp/private_key_*.key'
-
                     sshagent(['GitHub-ssh-bot-latest-11-eks']) {
                         // Configure git user
                         sh 'git config --global user.email "jenkins-bot@example.com"'
